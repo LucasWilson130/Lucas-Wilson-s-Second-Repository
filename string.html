@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>String Variables</title>
+    <!-- Tailwind CSS CDN for easy styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      /* Custom CSS to ensure Inter font is applied */
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f0f4f8; /* Light gray background */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+      }
+      .container {
+        background-color: #ffffff;
+        padding: 2.5rem; /* Increased padding */
+        border-radius: 1.5rem; /* More rounded corners */
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+          0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Softer shadow */
+        max-width: 90%;
+        width: 500px; /* Fixed width for better presentation on desktop */
+        text-align: left;
+      }
+      .string-display {
+        background-color: #e2e8f0; /* Lighter gray background for string display */
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem; /* Rounded corners for individual string displays */
+        margin-bottom: 0.75rem; /* Spacing between string displays */
+        word-wrap: break-word; /* Ensure long strings wrap */
+      }
+      .string-display:last-child {
+        margin-bottom: 0; /* No margin for the last element */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">
+        String Variable Showcase
+      </h1>
+
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-semibold mb-2"
+          >myString:</label
+        >
+        <div id="myStringDisplay" class="string-display text-gray-900"></div>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-semibold mb-2"
+          >anotherString (with leading spaces):</label
+        >
+        <div
+          id="anotherStringDisplay"
+          class="string-display text-gray-900"
+        ></div>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-semibold mb-2"
+          >hello:</label
+        >
+        <div id="helloDisplay" class="string-display text-gray-900"></div>
+      </div>
+
+      <div>
+        <label class="block text-gray-700 text-sm font-semibold mb-2"
+          >myName:</label
+        >
+        <div id="myNameDisplay" class="string-display text-gray-900"></div>
+      </div>
+    </div>
+
+    <script>
+      // JavaScript code starts here
+
+      // Define the string variables
+      const myString = "This is a string";
+      const anotherString = "   Another string"; // Note: 3 blank spaces at the beginning
+      const hello = "Hello there!";
+
+      // Prompt the user for their first name
+      // We're using a custom modal-like approach instead of prompt()
+      let myName = "";
+      function showNamePrompt() {
+        const promptBox = document.createElement("div");
+        promptBox.id = "namePromptBox";
+        promptBox.className =
+          "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50";
+        promptBox.innerHTML = `
+                <div class="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full">
+                    <h2 class="text-xl font-bold mb-4 text-gray-800">Enter Your First Name</h2>
+                    <input type="text" id="nameInput" class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4" placeholder="e.g., John">
+                    <button id="submitName" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">Submit</button>
+                </div>
+            `;
+        document.body.appendChild(promptBox);
+
+        document.getElementById("submitName").addEventListener("click", () => {
+          const nameInput = document.getElementById("nameInput");
+          myName = nameInput.value.trim(); // Get the value and trim whitespace
+          if (myName === "") {
+            myName = "Guest"; // Default if no name is entered
+          }
+          document.body.removeChild(promptBox);
+          updateDisplay(); // Update the display once name is entered
+        });
+
+        // Focus on the input field
+        setTimeout(() => {
+          document.getElementById("nameInput").focus();
+        }, 100);
+      }
+
+      // Function to update the display elements
+      function updateDisplay() {
+        // Get references to the HTML elements where strings will be displayed
+        const myStringDisplay = document.getElementById("myStringDisplay");
+        const anotherStringDisplay = document.getElementById(
+          "anotherStringDisplay"
+        );
+        const helloDisplay = document.getElementById("helloDisplay");
+        const myNameDisplay = document.getElementById("myNameDisplay");
+
+        // Set the text content of the HTML elements
+        // Using textContent is safer than innerHTML to prevent XSS attacks
+        myStringDisplay.textContent = myString;
+        // For 'anotherString', you might not visually see the leading spaces in a browser unless
+        // a monospace font or pre-formatted text (like <pre>) is used, or if inspected.
+        // However, the spaces are indeed present in the string.
+        anotherStringDisplay.textContent = anotherString;
+        helloDisplay.textContent = hello;
+        myNameDisplay.textContent = myName;
+      }
+
+      // Call the function to show the name prompt when the page loads
+      window.onload = showNamePrompt;
+
+      // JavaScript code ends here
+    </script>
+  </body>
+</html>

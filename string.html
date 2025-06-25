@@ -134,6 +134,32 @@
         >
         <div id="subStringDisplay" class="string-display text-gray-900"></div>
       </div>
+
+      <h2
+        class="text-2xl font-bold text-gray-800 mb-4 text-center border-t pt-4"
+      >
+        myName Case Conversion
+      </h2>
+
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-semibold mb-2"
+          >myName (Uppercase):</label
+        >
+        <div
+          id="myNameUpperCaseDisplay"
+          class="string-display text-gray-900"
+        ></div>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-semibold mb-2"
+          >myName (Lowercase):</label
+        >
+        <div
+          id="myNameLowerCaseDisplay"
+          class="string-display text-gray-900"
+        ></div>
+      </div>
     </div>
 
     <script>
@@ -240,6 +266,24 @@
         // Display the manipulated strings
         slicedStringDisplay.textContent = slicedIsA;
         subStringDisplay.textContent = subStringThe;
+
+        // --- myName Case Conversion ---
+        // Convert myName to uppercase
+        const myNameUpperCase = myName.toUpperCase();
+        // Convert myName to lowercase
+        const myNameLowerCase = myName.toLowerCase();
+
+        // Get references to the new HTML elements for case conversion
+        const myNameUpperCaseDisplay = document.getElementById(
+          "myNameUpperCaseDisplay"
+        );
+        const myNameLowerCaseDisplay = document.getElementById(
+          "myNameLowerCaseDisplay"
+        );
+
+        // Display the case-converted strings
+        myNameUpperCaseDisplay.textContent = myNameUpperCase;
+        myNameLowerCaseDisplay.textContent = myNameLowerCase;
       }
 
       // Call the function to show the name prompt when the page loads

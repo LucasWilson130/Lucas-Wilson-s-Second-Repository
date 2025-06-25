@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Browser File Handling</title>
+    <!-- Tailwind CSS CDN for easy styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      /* Custom CSS to ensure Inter font is applied */
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f0f4f8; /* Light gray background */
+        display: flex;
+        justify-content: center;
+        align-items: flex-start; /* Align to start for better scrolling with more content */
+        min-height: 100vh;
+        margin: 0;
+        padding: 2rem 0; /* Add padding top/bottom */
+      }
+      .container {
+        background-color: #ffffff;
+        padding: 2.5rem; /* Increased padding */
+        border-radius: 1.5rem; /* More rounded corners */
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+          0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Softer shadow */
+        max-width: 90%;
+        width: 600px; /* Wider for more content */
+        text-align: left;
+      }
+      .section-title {
+        @apply text-2xl font-bold text-gray-800 mb-4 text-center border-t pt-4;
+      }
+      .string-display {
+        background-color: #e2e8f0; /* Lighter gray background for string display */
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem; /* Rounded corners for individual string displays */
+        margin-bottom: 0.75rem; /* Spacing between string displays */
+        word-wrap: break-word; /* Ensure long strings wrap */
+        min-height: 2.5rem; /* Ensure minimum height even if empty */
+        display: flex; /* Use flex to center text vertically if it's short */
+        align-items: center;
+      }
+      .button {
+        @apply bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors duration-200;
+      }
+      .input-file {
+        @apply block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none;
+        padding: 0.5rem; /* Adjust padding for file input */
+      }
+      .message-box {
+        background-color: #fff;
+        border-radius: 0.75rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        padding: 1.5rem;
+        width: 90%;
+        max-width: 400px;
+        z-index: 1000;
+        position: fixed; /* Use fixed for message box */
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        opacity: 0; /* Hidden by default */
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+      }
+      .message-box.show {
+        opacity: 1;
+        visibility: visible;
+      }
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        display: none;
+      }
+      .overlay.show {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">
+        Browser File Handling Demo
+      </h1>
+
+      <div class="mb-6">
+        <label class="block text-gray-700 text-sm font-semibold mb-2"
+          >String to Save:</label
+        >
+        <textarea
+          id="stringToSaveInput"
+          class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-3"
+          rows="4"
+        >
+The following is the content and data I want to save to a text file.
+</textarea
+        >
+        <button id="saveStringBtn" class="button w-full">
+          Download as Text File
+        </button>
+        <p class="text-xs text-gray-600 mt-2">
+          (The file will start downloading and will be saved in your downloads
+          folder.)
+        </p>
+      </div>
+
+      <h2 class="section-title">Read a Text File</h2>
+
+      <div class="mb-6">
+        <label class="block text-gray-700 text-sm font-semibold mb-2"
+          >Select a Text File:</label
+        >
+        <input
+          type="file"
+          id="fileInput"
+          accept=".txt"
+          class="input-file mb-3"
+        />
+        <p class="text-xs text-gray-600 mt-2">
+          (Select a .txt file from your computer. Its content will be displayed
+          below.)
+        </p>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-semibold mb-2"
+          >File Content:</label
+        >
+        <div
+          id="fileContentDisplay"
+          class="string-display text-gray-900 bg-gray-100 min-h-[100px] whitespace-pre-wrap"
+        >
+          No file loaded yet.
+        </div>
+      </div>
+    </div>
+
+    <!-- Custom Message Box for prompts/alerts -->
+    <div id="messageBox" class="message-box">
+      <p id="messageText" class="text-lg text-gray-800 mb-4 text-center"></p>
+      <div id="messageButtons" class="flex justify-center space-x-4">
+        <button id="messageBoxOk" class="button">OK</button>
+      </div>
+    </div>
+    <div id="overlay" class="overlay"></div>
+
+    <script>
+      // JavaScript code starts here
+
+      /**
+       * Function to show a custom message box.
+       * Replaces alert() and confirm() for better UI and iframe compatibility.
+       * @param {string} message - The message to display.
+       * @param {function} [onOk] - Optional callback function for OK button.
+       */
+      function showMessageBox(message, onOk = null) {
+        const messageBox = document.getElementById("messageBox");
+        const messageText = document.getElementById("messageText");
+        const messageBoxOk = document.getElementById("messageBoxOk");
+        const overlay = document.getElementById("overlay");
+
+        messageText.textContent = message;
+
+        // Remove previous event listeners to prevent multiple calls
+        const oldOkListener = messageBoxOk.onclick;
+        if (oldOkListener) {
+          messageBoxOk.removeEventListener("click", oldOkListener);
+        }
+
+        messageBoxOk.onclick = () => {
+          messageBox.classList.remove("show");
+          overlay.classList.remove("show");
+          if (onOk) {
+            onOk();
+          }
+        };
+        messageBoxOk.addEventListener("click", messageBoxOk.onclick); // Add the new listener
+
+        messageBox.classList.add("show");
+        overlay.classList.add("show");
+      }
+
+      /**
+       * Function to save a string to a text file by triggering a download.
+       * This simulates file saving in a browser environment.
+       */
+      function saveStringToFile() {
+        const stringToSave = document.getElementById("stringToSaveInput").value;
+        const filename = "my_saved_data.txt"; // Default filename
+
+        if (stringToSave.trim() === "") {
+          showMessageBox("Please enter some text to save.");
+          return;
+        }
+
+        try {
+          // 1. Create a Blob object from the string data
+          const blob = new Blob([stringToSave], { type: "text/plain" });
+
+          // 2. Create a temporary URL for the Blob
+          const url = URL.createObjectURL(blob);
+
+          // 3. Create a temporary <a> element
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = filename; // Set the desired filename for download
+
+          // 4. Programmatically click the <a> element to trigger download
+          document.body.appendChild(a); // Append to body is good practice, though not always strictly necessary for programmatic click
+          a.click();
+          document.body.removeChild(a); // Clean up the temporary element
+
+          // 5. Revoke the object URL to free up memory
+          // Use a slight delay to ensure the download has started
+          setTimeout(() => {
+            URL.revokeObjectURL(url);
+          }, 100);
+
+          showMessageBox(`'${filename}' has been prepared for download.`);
+        } catch (error) {
+          console.error("Error saving string to file:", error);
+          showMessageBox(
+            "Failed to prepare file for download. Please try again."
+          );
+        }
+      }
+
+      /**
+       * Function to read the content of a selected text file.
+       * This simulates file reading in a browser environment.
+       */
+      function readFileContent() {
+        const fileInput = document.getElementById("fileInput");
+        const fileContentDisplay =
+          document.getElementById("fileContentDisplay");
+
+        // Check if a file was selected
+        if (fileInput.files.length === 0) {
+          fileContentDisplay.textContent = "No file selected.";
+          showMessageBox("Please select a text file to read.");
+          return;
+        }
+
+        const file = fileInput.files[0]; // Get the first selected file
+
+        // Ensure it's a text file (optional, but good practice)
+        if (!file.type.startsWith("text/") && !file.name.endsWith(".txt")) {
+          fileContentDisplay.textContent =
+            "Please select a valid text (.txt) file.";
+          showMessageBox(
+            "Invalid file type. Please select a text (.txt) file."
+          );
+          return;
+        }
+
+        // 1. Create a FileReader object
+        const reader = new FileReader();
+
+        // 2. Define the onload event handler
+        reader.onload = function (event) {
+          // The file content is available in event.target.result
+          const content = event.target.result;
+          fileContentDisplay.textContent = content; // Display the content
+          showMessageBox(`Successfully read '${file.name}'.`);
+        };
+
+        // 3. Define the onerror event handler (for error handling)
+        reader.onerror = function () {
+          console.error("Error reading file:", reader.error);
+          fileContentDisplay.textContent = "Error reading file.";
+          showMessageBox("An error occurred while reading the file.");
+        };
+
+        // 4. Read the file as text
+        reader.readAsText(file);
+      }
+
+      // Add event listeners once the DOM is fully loaded
+      window.onload = function () {
+        document
+          .getElementById("saveStringBtn")
+          .addEventListener("click", saveStringToFile);
+        document
+          .getElementById("fileInput")
+          .addEventListener("change", readFileContent);
+      };
+
+      // JavaScript code ends here
+    </script>
+  </body>
+</html>

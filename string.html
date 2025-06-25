@@ -35,7 +35,7 @@
         word-wrap: break-word; /* Ensure long strings wrap */
       }
       .string-display:last-child {
-        margin-bottom: 0; /* No margin for the last element */
+        margin-bottom: 0; /* No margin for the last element within a section */
       }
     </style>
   </head>
@@ -111,6 +111,29 @@
           class="string-display text-gray-900"
         ></div>
       </div>
+
+      <h2
+        class="text-2xl font-bold text-gray-800 mb-4 text-center border-t pt-4"
+      >
+        String Manipulation
+      </h2>
+
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-semibold mb-2"
+          >Slice "is a" from myString:</label
+        >
+        <div
+          id="slicedStringDisplay"
+          class="string-display text-gray-900"
+        ></div>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-semibold mb-2"
+          >Substring "the" from anotherString:</label
+        >
+        <div id="subStringDisplay" class="string-display text-gray-900"></div>
+      </div>
     </div>
 
     <script>
@@ -169,8 +192,7 @@
         helloDisplay.textContent = hello;
         myNameDisplay.textContent = myName;
 
-        // --- New additions for string properties ---
-
+        // --- String Properties ---
         // Calculate length of myString
         const myStringLength = myString.length;
         // Get the first character (index 0)
@@ -194,7 +216,30 @@
         myStringFirstCharDisplay.textContent = myStringFirstChar;
         myStringEleventhCharDisplay.textContent = myStringEleventhChar;
 
-        // --- End of new additions ---
+        // --- String Manipulation ---
+        // Slice "is a" from myString
+        // "This is a string"
+        // Indices:    0123456789...
+        // Characters: T h i s   i s   a   s t r i n g
+        // "is a" starts at index 5 and ends before index 9.
+        const slicedIsA = myString.slice(5, 9);
+
+        // Use substring to get "the" from anotherString
+        // "   Another string"
+        // Indices:      01234567890123...
+        // Characters:   _ _ _ A n o t h e r _ s t r i n g
+        // "the" starts at index 10 and ends before index 13.
+        const subStringThe = anotherString.substring(10, 13);
+
+        // Get references to the new HTML elements for manipulation results
+        const slicedStringDisplay = document.getElementById(
+          "slicedStringDisplay"
+        );
+        const subStringDisplay = document.getElementById("subStringDisplay");
+
+        // Display the manipulated strings
+        slicedStringDisplay.textContent = slicedIsA;
+        subStringDisplay.textContent = subStringThe;
       }
 
       // Call the function to show the name prompt when the page loads

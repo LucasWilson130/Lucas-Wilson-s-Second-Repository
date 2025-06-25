@@ -160,6 +160,49 @@
           class="string-display text-gray-900"
         ></div>
       </div>
+
+      <h2
+        class="text-2xl font-bold text-gray-800 mb-4 text-center border-t pt-4"
+      >
+        Various Utility Methods
+      </h2>
+
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-semibold mb-2"
+          >Concatenated hello and myName:</label
+        >
+        <div
+          id="concatenatedStringDisplay"
+          class="string-display text-gray-900"
+        ></div>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-semibold mb-2"
+          >Trimmed anotherString:</label
+        >
+        <div
+          id="trimmedStringDisplay"
+          class="string-display text-gray-900"
+        ></div>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-semibold mb-2"
+          >myString with "is a" replaced:</label
+        >
+        <div
+          id="replacedStringDisplay"
+          class="string-display text-gray-900"
+        ></div>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-semibold mb-2"
+          >myString split by spaces:</label
+        >
+        <div id="splitStringDisplay" class="string-display text-gray-900"></div>
+      </div>
     </div>
 
     <script>
@@ -204,7 +247,7 @@
 
       // Function to update the display elements
       function updateDisplay() {
-        // Get references to the HTML elements where strings will be displayed
+        // Get references to the HTML elements where original strings will be displayed
         const myStringDisplay = document.getElementById("myStringDisplay");
         const anotherStringDisplay = document.getElementById(
           "anotherStringDisplay"
@@ -212,21 +255,17 @@
         const helloDisplay = document.getElementById("helloDisplay");
         const myNameDisplay = document.getElementById("myNameDisplay");
 
-        // Set the text content of the HTML elements
+        // Set the text content of the HTML elements for original strings
         myStringDisplay.textContent = myString;
         anotherStringDisplay.textContent = anotherString;
         helloDisplay.textContent = hello;
         myNameDisplay.textContent = myName;
 
         // --- String Properties ---
-        // Calculate length of myString
         const myStringLength = myString.length;
-        // Get the first character (index 0)
         const myStringFirstChar = myString[0];
-        // Get the 11th character (index 10, because string indices are zero-based)
         const myStringEleventhChar = myString[10];
 
-        // Get references to the new HTML elements for properties
         const myStringLengthDisplay = document.getElementById(
           "myStringLengthDisplay"
         );
@@ -237,43 +276,26 @@
           "myStringEleventhCharDisplay"
         );
 
-        // Display the calculated properties
         myStringLengthDisplay.textContent = myStringLength;
         myStringFirstCharDisplay.textContent = myStringFirstChar;
         myStringEleventhCharDisplay.textContent = myStringEleventhChar;
 
-        // --- String Manipulation ---
-        // Slice "is a" from myString
-        // "This is a string"
-        // Indices:    0123456789...
-        // Characters: T h i s   i s   a   s t r i n g
-        // "is a" starts at index 5 and ends before index 9.
+        // --- String Manipulation (slice & substring) ---
         const slicedIsA = myString.slice(5, 9);
-
-        // Use substring to get "the" from anotherString
-        // "   Another string"
-        // Indices:      01234567890123...
-        // Characters:   _ _ _ A n o t h e r _ s t r i n g
-        // "the" starts at index 10 and ends before index 13.
         const subStringThe = anotherString.substring(10, 13);
 
-        // Get references to the new HTML elements for manipulation results
         const slicedStringDisplay = document.getElementById(
           "slicedStringDisplay"
         );
         const subStringDisplay = document.getElementById("subStringDisplay");
 
-        // Display the manipulated strings
         slicedStringDisplay.textContent = slicedIsA;
         subStringDisplay.textContent = subStringThe;
 
         // --- myName Case Conversion ---
-        // Convert myName to uppercase
         const myNameUpperCase = myName.toUpperCase();
-        // Convert myName to lowercase
         const myNameLowerCase = myName.toLowerCase();
 
-        // Get references to the new HTML elements for case conversion
         const myNameUpperCaseDisplay = document.getElementById(
           "myNameUpperCaseDisplay"
         );
@@ -281,9 +303,47 @@
           "myNameLowerCaseDisplay"
         );
 
-        // Display the case-converted strings
         myNameUpperCaseDisplay.textContent = myNameUpperCase;
         myNameLowerCaseDisplay.textContent = myNameLowerCase;
+
+        // --- Various Utility Methods (New Additions) ---
+
+        // 1. Use the concat method to join the hello string and myName string
+        // We add a space to make it readable, as concat simply joins without adding spaces.
+        const concatenatedString = hello.concat(" ", myName);
+
+        // 2. Use the trim method to remove the spaces in anotherString
+        const trimmedAnotherString = anotherString.trim();
+
+        // 3. Use the replace method to change “is a” to an empty space in myString
+        // Note: replace() only replaces the *first* occurrence by default.
+        // If you wanted to replace all, you'd use replaceAll() or a regex with the 'g' flag.
+        const replacedString = myString.replace("is a", " ");
+
+        // 4. Use the split method on myString using the spaces to break the string
+        // This will return an array of substrings.
+        const splitMyStringArray = myString.split(" ");
+        // To display an array in a readable format, we can join its elements with a comma and space.
+        const splitMyStringDisplay = splitMyStringArray.join(", ");
+
+        // Get references to the new HTML elements for various utility methods
+        const concatenatedStringDisplay = document.getElementById(
+          "concatenatedStringDisplay"
+        );
+        const trimmedStringDisplay = document.getElementById(
+          "trimmedStringDisplay"
+        );
+        const replacedStringDisplay = document.getElementById(
+          "replacedStringDisplay"
+        );
+        const splitStringDisplay =
+          document.getElementById("splitStringDisplay");
+
+        // Display the results
+        concatenatedStringDisplay.textContent = concatenatedString;
+        trimmedStringDisplay.textContent = `'${trimmedAnotherString}' (Note: leading spaces removed)`; // Add quotes to show trim effect
+        replacedStringDisplay.textContent = replacedString;
+        splitStringDisplay.textContent = splitMyStringDisplay;
       }
 
       // Call the function to show the name prompt when the page loads

@@ -3,15 +3,17 @@ let anotherString = "   Another string"; // 3 blank spaces at the beginning
 let hello = "Hello there!";
 let myName = "Lucas"; // Replace "Lucas" with your first name
 
-// Find out the length of myString
-let myStringLength = myString.length;
-console.log("Length of myString:", myStringLength);
+// Slice "is a" from myString
+// "is a" starts at index 5 and ends before index 9.
+let slicedString = myString.slice(5, 9);
+console.log("Sliced 'is a' from myString:", slicedString);
 
-// Find out the first character of myString
-let firstCharOfMyString = myString.charAt(0);
-console.log("First character of myString:", firstCharOfMyString);
+// Use substring to get "the" from "Hello there!" (assuming this was the intention, as "the" is not in anotherString)
+// "the" from "Hello there!" starts at index 6 and ends before index 9.
+let subStringFromHello = hello.substring(6, 9);
+console.log("Substring 'the' from hello:", subStringFromHello);
 
-// Find out the 11th character of myString
-// Remember that string indices are 0-based, so the 11th character is at index 10.
-let eleventhCharOfMyString = myString.charAt(10);
-console.log("11th character of myString:", eleventhCharOfMyString);
+// If the request for "the" from "anotherString" was literal and an error,
+// here's what substring would return (an empty string or part of "Another"):
+// let subStringFromAnother = anotherString.substring(startIndex, endIndex);
+// console.log("Substring 'the' from anotherString (will be empty or incorrect):", subStringFromAnother);

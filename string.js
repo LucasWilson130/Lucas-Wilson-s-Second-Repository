@@ -1,7 +1,7 @@
 let myString = "This is a string";
 let anotherString = "   Another string"; // 3 blank spaces at the beginning
 let hello = "Hello there!";
-let myName = "Botanic"; // Replace "Botanic" with your first name
+let myName = "Lucas"; // Replace "Lucas" with your first name
 
 // Find out the length of myString
 let myStringLength = myString.length;
